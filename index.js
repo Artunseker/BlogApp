@@ -2,19 +2,18 @@ const express = require('express');
 
 const app = express();//uygulamamızı oluşturduk
 
-app.use((req,res,next)=>{
-    console.log("middleware 1");
-    next();
+app.use("/blogs/:blogid/users/:username",(req,res)=>{
+    console.log(req.params.blogid);
+    console.log(req.params.username);
+    res.send("blog detay sayfası");
 });
 
-app.use((req,res,next)=>{
-    console.log("middleware 2");
-    next();
+app.use("/blogs",(req,res)=>{
+    res.send("blog listesi");
 });
 
-app.use((req,res)=>{
-    console.log("middleware 3");
-    res.send("<h1>home page</h1>");
+app.use("/",(req,res)=>{
+    res.send("Anasayfa");
 });
 
 app.listen(8000, () => {
