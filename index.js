@@ -3,6 +3,8 @@ const path = require('path');
 
 const app = express();//uygulamamızı oluşturduk
 
+app.set("view engine","ejs");
+
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
 const adminRouter = require('./routes/admin');
 

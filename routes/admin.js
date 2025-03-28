@@ -1,18 +1,17 @@
 const express = require("express");
-const path = require("path");
 const adminRouter = express.Router();
 
 adminRouter.use("/blog/create",(req,res)=>{
-    res.sendFile(path.join(__dirname, '../views/admin',"blog-create.html"));
+    res.render('admin/blog-create');
 });
 
 adminRouter.use("/blogs/:blog_id",(req,res)=>{
-    res.sendFile(path.join(__dirname, '../views/admin',"blog-edit.html"));
+    res.render('admin/blog-edit');
 
 });
 
 adminRouter.use("/blogs",(req,res)=>{
-    res.sendFile(path.join(__dirname, '../views/admin',"blog-list.html"));
+    res.render('admin/blog-list');
 });
 
 
