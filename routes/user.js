@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const db=require("../data/db.js"); 
+
 const data={
     title:"Popüler Kurslar",
     categories:[
@@ -50,15 +52,39 @@ const data={
 }
 
 router.use("/blogs/:blogid",(req,res)=>{
+    
     res.render('users/blog-details');
 });
 
 router.use("/blogs",(req,res)=>{
-    res.render('users/blogs',data);
+    db.execute("SELECT * FROM blog where onay=1")
+        .then(result=>{
+            res.render('users/blogs',
+                {bloglar:result[0],
+                     title:"Anasayfa",
+                     categories:data.categories,
+                     bloglar:result[0],
+            }); 
+        })
+        .catch(err=>{
+            console.log(err);
+        });
 });
 
 router.use("/",(req,res)=>{
-    res.render('users/index',data); // burada html de dinamik ejs aracılığyla kullanmak için users indexe data verilerini gönderiyoruz
+    db.execute("SELECT * FROM blog where onay=1 and anasayfa=1")
+        .then(result=>{
+            res.render('users/index',
+                {bloglar:result[0],
+                     title:"Popüler Kurslar",
+                     categories:data.categories,
+                     bloglar:result[0],
+            }); // burada html de dinamik ejs aracılığyla kullanmak için users indexe data verilerini gönderiyoruz
+        })
+        .catch(err=>{
+            console.log(err);
+        });
+    
 });
 
 module.exports = router;

@@ -19,10 +19,7 @@
                 </h1>
 
                 <% bloglar.forEach(blog => { %>
-                    <% if (blog.onay) { %>
-                        <%- include('./partials/blog-card',blog) %>
-                    <% } %>
-                    
+                    <%- include('./partials/blog-card',blog) %>
                 <% }) %>
 
                 <% if (bloglar.filter(b=>b.onay).length>3) { %>

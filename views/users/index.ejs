@@ -17,13 +17,7 @@
                 </h1>
 
                 <% bloglar.forEach(blog => { %>
-
-                    <% if (blog.anasayfa && blog.onay) { %>
-
                         <%- include('./partials/blog-card',blog) %>
-
-                    <% } %>
-                    
                 <% }) %>
                 
 

@@ -1,26 +1,11 @@
 const express = require('express');
 const path = require('path');
-const config=require('./config.js');
-const mysql=require('mysql2');
 
 const app = express();//uygulamamızı oluşturduk
 
 app.set("view engine","ejs");
 
 
-let connection=mysql.createConnection(config.db);
-
-connection.connect((err)=>{
-    if(err){
-        console.log("Error connecting to database: "+err);
-        return;
-    }
-    console.log("Connected to database");
-    
-    connection.query("SELECT * FROM blog",(err,rows)=>{
-        console.log(rows[0].title);
-    });
-});
 
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
 const adminRouter = require('./routes/admin');
