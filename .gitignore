@@ -28,3 +28,6 @@ coverage/
 # Çeşitli sistem dosyaları
 .DS_Store
 Thumbs.db
+/config.js
+config.js
+./config.js
