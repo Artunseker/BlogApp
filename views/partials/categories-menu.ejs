@@ -1,8 +1,11 @@
 <div class="list-group">
-    <a href="" class="list-group-item list-group-item-action">Tüm Kategoriler
+    <a href="/blogs" class="list-group-item list-group-item-action">Tüm Kategoriler
     </a>
     <% categories.forEach(function(category) {%>
-        <a href="" class="list-group-item list-group-item-action"> <%= category.name %> </a>
+        <a href="/blogs/categories/<%= category.idcategories %>" 
+            class="list-group-item list-group-item-action <%= selectedCategory ==category.idcategories ? 'active':'' %> "> 
+            <%= category.name %> 
+        </a>
 
     <% }) %>
                         

@@ -3,15 +3,38 @@ const router = express.Router();
 
 const db=require("../data/db.js"); 
 
+router.use("/blogs/categories/:categoryid",async function(req,res){
+    const id=req.params.categoryid;
+    
+    try{
+        const [blogs] = await db.execute("SELECT * FROM blog where categoryid=?",[id]);
+        
+        const [categories] = await db.execute("SELECT * FROM categories");
+        
+        res.render('users/blogs',{
+            title:"Tüm Kurslar",
+            categories:categories,
+            bloglar:blogs,
+            selectedCategory:id,
+        });
+    }
+    catch(err){
+        console.log(err);
+    }
+    
+});
+
 router.use("/blogs/:blogid",async function(req,res){
     const id =req.params.blogid;
 
     try{
-        const [blog] = await db.execute("SELECT * FROM blog where blogid=?",[id]);
-        if(blog[0]){
+        const [blogs] = await db.execute("SELECT * FROM blog where blogid=?",[id]);
+        const blog=blogs[0];
+
+        if(blog){
             return res.render('users/blog-details',{
-                title:blog[0].baslik,
-                blog:blog[0],
+                title:blog.baslik,
+                blog:blog,
             });
         }
         res.redirect("/blogs");
@@ -30,6 +53,7 @@ router.use("/blogs",async function(req,res){
             title:"Tüm Kurslar",
             categories:categories,
             bloglar:blogs,
+            selectedCategory:null,
         });
     }
     catch(err){
@@ -47,6 +71,7 @@ router.use("/", async function(req,res){
             title:"Popüler Kurslar",
             categories:categories,
             bloglar:blogs,
+            selectedCategory:null,
    }); // burada html de dinamik ejs aracılığyla kullanmak için users indexe db verilerini gönderiyoruz
     }
     catch(err){
