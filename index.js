@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();//uygulamamızı oluşturduk
 
 app.set("view engine","ejs");
-
+app.use(express.urlencoded({extended:false}));
 
 
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
