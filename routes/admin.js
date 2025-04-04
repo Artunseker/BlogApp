@@ -29,7 +29,7 @@ adminRouter.post("/blog/create", async(req,res)=>{
         await db.execute("Insert into blog(title,description,image,anasayfa,onay,categoryid) Values (?,?,?,?,?,?)",
             [baslik,aciklama,resim,anasayfa,onay,kategori]
         )
-        res.redirect("/")
+        res.redirect("/admin/blogs");
     }
     catch(err){
         console.log(err);
@@ -41,8 +41,18 @@ adminRouter.get("/blogs/:blog_id",(req,res)=>{
 
 });
 
-adminRouter.get("/blogs",(req,res)=>{
-    res.render('admin/blog-list');
+adminRouter.get("/blogs",async (req,res)=>{
+    try{
+        const [blogs] = await db.execute("SELECT blogid,title,image FROM blog");
+
+        res.render('admin/blog-list',{
+            title:"Blog Listesi",
+            bloglar:blogs,
+        });
+    }
+    catch(err){
+        console.log(err);
+    }
 });
 
 
