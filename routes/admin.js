@@ -36,9 +36,25 @@ adminRouter.post("/blog/create", async(req,res)=>{
     }
 });
 
-adminRouter.get("/blogs/:blog_id",(req,res)=>{
-    res.render('admin/blog-edit');
-
+adminRouter.get("/blogs/:blog_id",async(req,res)=>{
+    const blog_id=req.params.blog_id;
+    try{
+        const [bloglar]=await db.execute("Select * from blog where blogid=?", [blog_id]);
+        const [categories]=await db.execute("Select * from categories");
+        const blog=bloglar[0];
+        
+        if(blog){
+            return res.render('admin/blog-edit',{
+                title:blog.title,
+                blog:blog,
+                categories:categories
+            });
+        }
+        res.redirect("/admin/blogs");
+    }
+    catch(err){
+        console.log(err);
+    }
 });
 
 adminRouter.get("/blogs",async (req,res)=>{
