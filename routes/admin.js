@@ -57,6 +57,29 @@ adminRouter.get("/blogs/:blog_id",async(req,res)=>{
     }
 });
 
+adminRouter.post("/blogs/:blog_id",async(req,res)=>{
+    const IDblog=req.params.blog_id;
+    const baslik=req.body.baslik;
+    const aciklama=req.body.aciklama;
+    const resim=req.body.resim;
+    const kategori=req.body.kategori;
+    const anasayfa=req.body.anasayfa=="on" ? 1:0;
+    const onay = req.body.onay=="on" ? 1:0;
+
+    try{
+        await db.execute("Update blog set title=?, description=?, image=?, anasayfa=?, onay=?, categoryid=? where blogid=?",
+            [baslik,aciklama,resim,anasayfa,onay,kategori,IDblog]
+        )
+        res.redirect("/admin/blogs");
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
+
+
+
 adminRouter.get("/blogs",async (req,res)=>{
     try{
         const [blogs] = await db.execute("SELECT blogid,title,image FROM blog");
