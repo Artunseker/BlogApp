@@ -3,6 +3,33 @@ const adminRouter = express.Router();
 
 const db=require("../data/db");
 
+adminRouter.get("/blog/delete/:blogid",async(req,res)=>{
+    const blog_id=req.params.blogid;
+    try{
+        const [bloglar]=await db.execute("Select * from blog where blogid=?", [blog_id]);
+        const blog=bloglar[0];
+
+        res.render('admin/blog-delete',{
+            title:"Delete Blog",
+            blog:blog,
+        });
+        
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
+adminRouter.post("/blog/delete/:blogid",async(req,res)=>{
+    const blog_id=req.body.blogid;
+    try{
+        await db.execute("Delete from blog where blogid=?", [blog_id]);
+        res.redirect("/admin/blogs");
+    }
+    catch(err){
+        console.log(err);
+    }
+});
 
 adminRouter.get("/blog/create",async (req,res)=>{
     try{
