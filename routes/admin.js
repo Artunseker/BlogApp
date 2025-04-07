@@ -2,6 +2,107 @@ const express = require("express");
 const adminRouter = express.Router();
 
 const db=require("../data/db");
+//categories
+
+
+
+adminRouter.get("/category/delete/:categoryid",async function(req,res){
+    const category_id=req.params.categoryid;
+    try{
+        const [categories]=await db.execute("Select * from categories where categoryid=?", [category_id]);
+        const category=categories[0];
+
+        res.render('admin/category-delete',{
+            title:"Delete Category",
+            category:category,
+        });
+        
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+adminRouter.post("/category/delete/:categoryid",async function(req,res){
+    const category_id=req.body.kategoryid;
+    try{
+        await db.execute("Delete from categories where categoryid=?", [category_id]);
+        res.redirect("/admin/categories?action=delete");
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
+adminRouter.get("/categories/:categoryid",async function(req,res){
+    const category_id=req.params.categoryid;
+    try{
+        const [categories]=await db.execute("Select * from categories where categoryid=?", [category_id]);
+        const category=categories[0];
+
+        if(category){
+            res.render('admin/category-edit',{
+                title:"Edit Category",
+                category:category,
+            });
+        }    
+        res.redirect("/admin/categories");
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
+adminRouter.post("/categories/:categoryid",async(req,res)=>{
+    const IDcategory=req.params.categoryid;
+    const kategori=req.body.isim;
+    try{
+        await db.execute("Update categories set name=? where categoryid=?", [kategori,IDcategory]);
+        res.redirect("/admin/categories?action=edit&categoryid="+IDcategory);
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
+adminRouter.get("/category/create",async function(req,res){
+    try{
+        res.render('admin/category-create',{
+            title:"Kategori Ekle",
+        });
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
+adminRouter.post("/category/create",async function(req,res){
+    const kategori=req.body.isim;
+    try{
+        await db.execute("Insert into categories(name) Values (?)", [kategori]);
+        res.redirect("/admin/categories?action=create");
+    }
+    catch(err){ 
+        console.log(err);
+    }
+});
+
+
+adminRouter.get("/categories",async(req,res)=>{
+    try{
+        const [categories] = await db.execute("SELECT * FROM categories");
+        res.render('admin/category-list',{
+            title:"Kategori Listesi",
+            categories:categories,
+            action:req.query.action,
+            categoryid:req.query.categoryid,
+        });
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
+//blogs
 
 adminRouter.get("/blog/delete/:blogid",async(req,res)=>{
     const blog_id=req.params.blogid;
@@ -103,8 +204,6 @@ adminRouter.post("/blogs/:blog_id",async(req,res)=>{
         console.log(err);
     }
 });
-
-
 
 
 adminRouter.get("/blogs",async (req,res)=>{
