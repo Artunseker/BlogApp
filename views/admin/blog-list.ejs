@@ -10,6 +10,21 @@
     <div class="container mt-3">
         <div class="r0w">
             <div class="col-md-12 mt-3">
+                <% if (action!="undefined" && action=="edit") { %>
+                    <div class="alert alert-success">
+                        <%= blogid %></strong>. Blog başarıyla güncellendi.
+                    </div>
+                <% } %>
+                <% if (action!="undefined" && action=="create") { %>
+                    <div class="alert alert-success">
+                        <strong>Başarılı!</strong> Blog başarıyla eklendi.
+                    </div>
+                <% } %>
+                <% if (action!="undefined" && action=="delete") { %>
+                    <div class="alert alert-danger">
+                        <strong>Başarılı!</strong> Blog başarıyla silindi.
+                    </div>
+                <% } %>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>

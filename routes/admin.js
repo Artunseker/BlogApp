@@ -24,7 +24,7 @@ adminRouter.post("/blog/delete/:blogid",async(req,res)=>{
     const blog_id=req.body.blogid;
     try{
         await db.execute("Delete from blog where blogid=?", [blog_id]);
-        res.redirect("/admin/blogs");
+        res.redirect("/admin/blogs?action=delete");
     }
     catch(err){
         console.log(err);
@@ -56,7 +56,7 @@ adminRouter.post("/blog/create", async(req,res)=>{
         await db.execute("Insert into blog(title,description,image,anasayfa,onay,categoryid) Values (?,?,?,?,?,?)",
             [baslik,aciklama,resim,anasayfa,onay,kategori]
         )
-        res.redirect("/admin/blogs");
+        res.redirect("/admin/blogs?action=create");
     }
     catch(err){
         console.log(err);
@@ -97,7 +97,7 @@ adminRouter.post("/blogs/:blog_id",async(req,res)=>{
         await db.execute("Update blog set title=?, description=?, image=?, anasayfa=?, onay=?, categoryid=? where blogid=?",
             [baslik,aciklama,resim,anasayfa,onay,kategori,IDblog]
         )
-        res.redirect("/admin/blogs");
+        res.redirect("/admin/blogs?action=edit&blogid="+IDblog);
     }
     catch(err){
         console.log(err);
@@ -114,6 +114,9 @@ adminRouter.get("/blogs",async (req,res)=>{
         res.render('admin/blog-list',{
             title:"Blog Listesi",
             bloglar:blogs,
+            action:req.query.action,
+            blogid:req.query.blogid
+
         });
     }
     catch(err){
