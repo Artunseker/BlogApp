@@ -40,7 +40,7 @@ adminRouter.get("/categories/:categoryid",async function(req,res){
         const category=categories[0];
 
         if(category){
-            res.render('admin/category-edit',{
+            return res.render('admin/category-edit',{
                 title:"Edit Category",
                 category:category,
             });
