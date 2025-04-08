@@ -1,6 +1,7 @@
 const express = require("express");
 const adminRouter = express.Router();
 
+const imgupload = require("../helpers/image-upload");
 const db=require("../data/db");
 //categories
 
@@ -146,17 +147,17 @@ adminRouter.get("/blog/create",async (req,res)=>{
     }
 });
 
-adminRouter.post("/blog/create", async(req,res)=>{
+adminRouter.post("/blog/create",imgupload.single("resim"), async(req,res)=>{
     const baslik=req.body.baslik;
     const aciklama=req.body.aciklama;
-    const resim=req.body.resim;
+    const resim=req.file.filename;
     const kategori=req.body.kategori;
     const anasayfa=req.body.anasayfa=="on" ? 1:0;
     const onay = req.body.onay=="on" ? 1:0;
     try{
+        console.log(resim);
         await db.execute("Insert into blog(title,description,image,anasayfa,onay,categoryid) Values (?,?,?,?,?,?)",
-            [baslik,aciklama,resim,anasayfa,onay,kategori]
-        )
+            [baslik,aciklama,resim,anasayfa,onay,kategori])
         res.redirect("/admin/blogs?action=create");
     }
     catch(err){
