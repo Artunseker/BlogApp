@@ -9,6 +9,9 @@ app.use(express.urlencoded({extended:false}));
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
 const adminRouter = require('./routes/admin');
 
+const Blog = require('./models/blog');
+const Categories = require('./models/category');
+
 app.use("/libraries",express.static("node_modules"));//takma isim libraries, html gibi static dosyalar için kullanılır
 app.use("/static",express.static("public"));//public klasör dosyalar için kullanılır fakat static adı ile html de kullanılır. Çünkü daha güvenlidir.
 
