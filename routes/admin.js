@@ -2,7 +2,9 @@ const express = require("express");
 const adminRouter = express.Router();
 const fs = require("fs");
 const imgupload = require("../helpers/image-upload");
-const db=require("../data/db");
+
+const Blog = require("../models/blog");
+const Categories = require("../models/category");
 //categories
 
 
@@ -10,14 +12,14 @@ const db=require("../data/db");
 adminRouter.get("/category/delete/:categoryid",async function(req,res){
     const category_id=req.params.categoryid;
     try{
-        const [categories]=await db.execute("Select * from categories where categoryid=?", [category_id]);
-        const category=categories[0];
-
-        res.render('admin/category-delete',{
-            title:"Delete Category",
-            category:category,
-        });
-        
+        const category=await Categories.findByPk(category_id);
+        if(category){
+            res.render('admin/category-delete',{
+                title:"Delete Category",
+                category:category,
+            });
+        }
+        res.redirect("/admin/categories");
     }
     catch(err){
         console.log(err);
@@ -26,7 +28,11 @@ adminRouter.get("/category/delete/:categoryid",async function(req,res){
 adminRouter.post("/category/delete/:categoryid",async function(req,res){
     const category_id=req.body.kategoryid;
     try{
-        await db.execute("Delete from categories where categoryid=?", [category_id]);
+        await Categories.destroy({
+            where:{
+                categoryid:category_id
+            }
+        });
         res.redirect("/admin/categories?action=delete");
     }
     catch(err){
@@ -37,13 +43,13 @@ adminRouter.post("/category/delete/:categoryid",async function(req,res){
 adminRouter.get("/categories/:categoryid",async function(req,res){
     const category_id=req.params.categoryid;
     try{
-        const [categories]=await db.execute("Select * from categories where categoryid=?", [category_id]);
-        const category=categories[0];
 
+        const category= await Categories.findByPk(category_id);
+        
         if(category){
             return res.render('admin/category-edit',{
-                title:"Edit Category",
-                category:category,
+                title:category.dataValues.name,
+                category:category.dataValues,
             });
         }    
         res.redirect("/admin/categories");
@@ -57,8 +63,12 @@ adminRouter.post("/categories/:categoryid",async(req,res)=>{
     const IDcategory=req.params.categoryid;
     const kategori=req.body.isim;
     try{
-        await db.execute("Update categories set name=? where categoryid=?", [kategori,IDcategory]);
-        res.redirect("/admin/categories?action=edit&categoryid="+IDcategory);
+        const category=await Categories.update({name:kategori},{
+            where:{
+                categoryid:IDcategory
+            }
+        });
+        return res.redirect("/admin/categories?action=edit&categoryid="+IDcategory);
     }
     catch(err){
         console.log(err);
@@ -79,7 +89,9 @@ adminRouter.get("/category/create",async function(req,res){
 adminRouter.post("/category/create",async function(req,res){
     const kategori=req.body.isim;
     try{
-        await db.execute("Insert into categories(name) Values (?)", [kategori]);
+        await Categories.create({
+            name: kategori
+        });
         res.redirect("/admin/categories?action=create");
     }
     catch(err){ 
@@ -90,7 +102,7 @@ adminRouter.post("/category/create",async function(req,res){
 
 adminRouter.get("/categories",async(req,res)=>{
     try{
-        const [categories] = await db.execute("SELECT * FROM categories");
+        const categories = await Categories.findAll();
         res.render('admin/category-list',{
             title:"Kategori Listesi",
             categories:categories,
@@ -108,14 +120,14 @@ adminRouter.get("/categories",async(req,res)=>{
 adminRouter.get("/blog/delete/:blogid",async(req,res)=>{
     const blog_id=req.params.blogid;
     try{
-        const [bloglar]=await db.execute("Select * from blog where blogid=?", [blog_id]);
-        const blog=bloglar[0];
-
-        res.render('admin/blog-delete',{
-            title:"Delete Blog",
-            blog:blog,
-        });
-        
+        const blog=await Blog.findByPk(blog_id);
+        if(blog){
+            return res.render('admin/blog-delete',{
+                title:"Delete Blog",
+                blog:blog,
+            });
+        }
+        res.redirect("/admin/blogs");
     }
     catch(err){
         console.log(err);
@@ -125,8 +137,12 @@ adminRouter.get("/blog/delete/:blogid",async(req,res)=>{
 adminRouter.post("/blog/delete/:blogid",async(req,res)=>{
     const blog_id=req.body.blogid;
     try{
-        await db.execute("Delete from blog where blogid=?", [blog_id]);
-        res.redirect("/admin/blogs?action=delete");
+        const blog = await Blog.findByPk(blog_id);
+        if(blog){
+            blog.destroy();
+            return res.redirect("/admin/blogs?action=delete");
+        }
+        res.redirect("/admin/blogs");
     }
     catch(err){
         console.log(err);
@@ -135,8 +151,7 @@ adminRouter.post("/blog/delete/:blogid",async(req,res)=>{
 
 adminRouter.get("/blog/create",async (req,res)=>{
     try{
-        const [categories,]=await db.execute("Select * from categories");
-
+        const categories = await Categories.findAll();
         res.render('admin/blog-create',{
             title:"Blog Ekleme",
             categories:categories
@@ -157,8 +172,15 @@ adminRouter.post("/blog/create",imgupload.single("resim"), async(req,res)=>{
     const onay = req.body.onay=="on" ? 1:0;
     try{
         console.log(resim);
-        await db.execute("Insert into blog(title,description,altbaslik,image,anasayfa,onay,categoryid) Values (?,?,?,?,?,?,?)",
-            [baslik,aciklama,altbaslik,resim,anasayfa,onay,kategori])
+        await Blog.create({
+            title: baslik,
+            altbaslik: altbaslik,
+            description: aciklama,
+            image: resim,
+            anasayfa: anasayfa,
+            onay: onay,
+            categoryid: kategori
+        });
         res.redirect("/admin/blogs?action=create");
     }
     catch(err){
@@ -168,13 +190,12 @@ adminRouter.post("/blog/create",imgupload.single("resim"), async(req,res)=>{
 adminRouter.get("/blogs/:blog_id",async(req,res)=>{
     const blog_id=req.params.blog_id;
     try{
-        const [bloglar]=await db.execute("Select * from blog where blogid=?", [blog_id]);
-        const [categories]=await db.execute("Select * from categories");
-        const blog=bloglar[0];
+        const blog=await Blog.findByPk(blog_id);
+        const categories=await Categories.findAll();
         
         if(blog){
             return res.render('admin/blog-edit',{
-                title:blog.title,
+                title:blog.dataValues.title,
                 blog:blog,
                 categories:categories
             });
@@ -207,10 +228,21 @@ adminRouter.post("/blogs/:blog_id", imgupload.single("resim"),async(req,res)=>{
     const onay = req.body.onay=="on" ? 1:0;
 
     try{
-        await db.execute("Update blog set title=?, altbaslik=?, description=?, image=?, anasayfa=?, onay=?, categoryid=? where blogid=?",
-            [baslik,altbaslik,aciklama,resim,anasayfa,onay,kategori,IDblog]
-        )
-        res.redirect("/admin/blogs?action=edit&blogid="+IDblog);
+        const blog=await Blog.findByPk(IDblog);
+        if(!blog){
+            return res.redirect("/admin/blogs");
+        }else{
+            blog.title=baslik;
+            blog.altbaslik=altbaslik;
+            blog.description=aciklama;
+            blog.image=resim;
+            blog.anasayfa=anasayfa;
+            blog.onay=onay;
+            blog.categoryid=kategori;
+
+            await blog.save();
+            return res.redirect("/admin/blogs?action=edit&blogid="+IDblog);
+        }    
     }
     catch(err){
         console.log(err);
@@ -220,8 +252,9 @@ adminRouter.post("/blogs/:blog_id", imgupload.single("resim"),async(req,res)=>{
 
 adminRouter.get("/blogs",async (req,res)=>{
     try{
-        const [blogs] = await db.execute("SELECT blogid,title,altbaslik,image FROM blog");
-
+        const blogs = await Blog.findAll({
+            attributes: ['blogid', 'title', 'altbaslik', 'image']
+        });
         res.render('admin/blog-list',{
             title:"Blog Listesi",
             bloglar:blogs,

@@ -44,7 +44,7 @@ const Blog=sequelize.define('blog',{
 });
 
 async function sync(){
-        await Blog.sync({force:true});
+        await Blog.sync({alter:true});
         console.log("Blog table created");
         //test verisi koyabilirsin
         if(Blog.count==0){

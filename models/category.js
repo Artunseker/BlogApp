@@ -17,7 +17,7 @@ const Categories=sequelize.define('category',{
 });
 
 async function sync(){
-    await Categories.sync({force:true});
+    await Categories.sync({alter:true});
     console.log("Category table created");
     //test verisi koyabilirsin
     if(Categories.count==0){

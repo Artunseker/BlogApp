@@ -1,4 +1,3 @@
-const mysql=require('mysql2');
 const config=require('../config.js');
 //let connection=mysql.createConnection(config.db);
 
