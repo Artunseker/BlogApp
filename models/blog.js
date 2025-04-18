@@ -33,41 +33,12 @@ const Blog=sequelize.define('blog',{
         type:DataTypes.BOOLEAN,
         allowNull:false
     },
-    categoryid:{
-        type:DataTypes.INTEGER,
-        allowNull:false
-    },
     createdAt:{
         type:DataTypes.DATE,
         defaultValue:DataTypes.NOW
     },
 });
 
-async function sync(){
-        await Blog.sync({alter:true});
-        console.log("Blog table created");
-        //test verisi koyabilirsin
-        if(Blog.count==0){
-            await Blog.create({
-                title:"Blog Title",
-                description:"Blog Description",
-                altbaslik:"Alt Baslik",
-                image:"1.jpeg",
-                anasayfa:true,
-                onay:true,
-                categoryid:1
-            });
-            await Blog.create({
-                title:"Blog Title2",
-                description:"Blog Description2",
-                altbaslik:"Alt Baslik2",
-                image:"2.jpeg",
-                anasayfa:true,
-                onay:true,
-                categoryid:2
-            });
-        } 
-}
-sync();
+
 
 module.exports=Blog;
