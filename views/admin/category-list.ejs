@@ -17,7 +17,7 @@
                 <% } %>
                 <% if (action!="undefined" && action=="edit") { %>
                     <div class="alert alert-success">
-                        <%= categoryid %></strong>. Blog başarıyla güncellendi.
+                        <%= categoryId %></strong>. Blog başarıyla güncellendi.
                     </div>
                 <% } %>
                 <% if (action!="undefined" && action=="delete") { %>
@@ -36,11 +36,11 @@
                     <tbody>
                         <% categories.forEach(category => { %>
                             <tr>
-                                <td><%= category.dataValues.categoryid %></td>
+                                <td><%= category.dataValues.id %></td>
                                 <td><%= category.dataValues.name %></td>
                                 <td>
-                                    <a class="btn btn-sm btn btn-primary" href="/admin/categories/<%= category.dataValues.categoryid %>">edit</a>
-                                    <a class="btn btn-sm btn btn-danger" href="/admin/category/delete/<%= category.dataValues.categoryid %>">delete</a>
+                                    <a class="btn btn-sm btn btn-primary" href="/admin/categories/<%= category.dataValues.id %>">edit</a>
+                                    <a class="btn btn-sm btn btn-danger" href="/admin/category/delete/<%= category.dataValues.id %>">delete</a>
                                 </td>
                             </tr>
                         <% }) %>

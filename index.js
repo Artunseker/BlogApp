@@ -34,10 +34,10 @@ const DummyData = require('./data/dummy-data.js');
 
 //IIFE
 (async() => {
-    await sequelize.sync({force:true});//veritabanı ile bağlantı kuruyoruz. force:true olursa veritabanını sıfırlar. false olursa sıfırlamaz.
+    await sequelize.sync({alter:true});//veritabanı ile bağlantı kuruyoruz. force:true olursa veritabanını sıfırlar. false olursa sıfırlamaz.
     await DummyData();//dummy-data.js dosyasındaki populate fonksiyonunu çalıştırıyoruz. Bu fonksiyon veritabanını dolduruyor.
 })();
 
 app.listen(8000, () => {
     console.log('Server is running on port 8000');
-}); 
+});
