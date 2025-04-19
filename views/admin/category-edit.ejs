@@ -27,6 +27,33 @@
                     </div>
                 </form>
             </div>
+            <p>
+               Blog Sayısı = <%= countBlog %>
+            </p>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">id</th>
+                        <th style="width: 150px;">Resim</th>
+                        <th>Başlık</th>
+                        <th style="width: 130px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% bloglar.forEach(blog => { %>
+                        <tr>
+                            <td><%= blog.id %></td>
+                            <td><img src="/static/images/<%= blog.image %>" class="img-fluid" alt="" ></td>
+                            <td><%= blog.title %></td>
+                            <td>
+                                <a class="btn btn-sm btn btn-primary" href="/admin/blogs/<%= blog.id %>">edit</a>
+                                <a class="btn btn-sm btn btn-danger" href="/admin/blog/delete/<%= blog.id %>">delete</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+
+            </table>
         </div>
     </div>
 </body>

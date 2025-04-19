@@ -25,7 +25,9 @@ Categories.hasMany(Blog,{
         name:"categoryId",
         allowNull:false,
         //defaultValue:1
-    }
+    },
+    // onDelete:"SET NULL",
+    // onUpdate:"RESTRICT"
 });
 Blog.belongsTo(Categories);
 
@@ -34,7 +36,7 @@ const DummyData = require('./data/dummy-data.js');
 
 //IIFE
 (async() => {
-    await sequelize.sync({alter:true});//veritabanı ile bağlantı kuruyoruz. force:true olursa veritabanını sıfırlar. false olursa sıfırlamaz.
+    await sequelize.sync({force:true});//veritabanı ile bağlantı kuruyoruz. force:true olursa veritabanını sıfırlar. false olursa sıfırlamaz.
     await DummyData();//dummy-data.js dosyasındaki populate fonksiyonunu çalıştırıyoruz. Bu fonksiyon veritabanını dolduruyor.
 })();
 
