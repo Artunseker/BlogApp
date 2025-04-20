@@ -163,7 +163,15 @@ const admin_post_edit_category=async(req,res)=>{
 const admin_get_edit_blog=async(req,res)=>{
     const blog_id=req.params.blog_id;
     try{
-        const blog=await Blog.findByPk(blog_id);
+        const blog=await Blog.findOne({
+            where:{
+                id:blog_id
+            },
+            include:{
+                model:Categories,
+                attributes:['id']
+            }
+        });
         const categories=await Categories.findAll();
         
         if(blog){

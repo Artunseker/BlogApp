@@ -40,8 +40,14 @@
                             <tr>
                                 <td><%= blog.id %></td>
                                 <td><img src="/static/images/<%= blog.image %>" class="img-fluid" alt="" ></td>
-                                <td><%= blog.title %></td>
-                                <td><%= blog.category.name %></td>
+                                <td>
+                                    <%= blog.title %>
+                                </td>
+                                <td>
+                                    <% blog.categories.forEach(category => { %>
+                                        <p><%= category.name %></p>
+                                    <% }) %>
+                                </td>
                                 <td>
                                     <a class="btn btn-sm btn btn-primary" href="/admin/blogs/<%= blog.id %>">edit</a>
                                     <a class="btn btn-sm btn btn-danger" href="/admin/blog/delete/<%= blog.id %>">delete</a>

@@ -8,8 +8,13 @@ const blogs_by_category = async function(req,res){
     try{
         const blogs = await Blog.findAll({
             where:{
-                categoryId:id,
                 onay:true
+            },
+            include:{
+                model:Categories,
+                where:{
+                    id:id
+                }
             },
             raw:true
         });
