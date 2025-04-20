@@ -223,14 +223,18 @@ const admin_post_edit_blog=async(req,res)=>{
 const admin_get_blogs=async (req,res)=>{
     try{
         const blogs = await Blog.findAll({
-            attributes: ['id', 'title', 'altbaslik', 'image']
+            attributes: ['id', 'title', 'altbaslik', 'image'],
+            include:{
+                model: Categories,
+                attributes: ['name'],
+            }
         });
         res.render('admin/blog-list',{
             title:"Blog Listesi",
             bloglar:blogs,
             action:req.query.action,
             blogid:req.query.blogid
-
+            
         });
     }
     catch(err){
