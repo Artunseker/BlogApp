@@ -16,20 +16,11 @@ app.use("/admin",adminRouter);//burada her admin ile başlayan route adminRouter
 app.use(userRouter);//user.js dosyasını kullanmaya başlıyoruz
 
 //ilişkiler
-//One to Many
 const Categories = require('./models/category.js');
 const Blog = require('./models/blog.js');
 
-Categories.hasMany(Blog,{
-    foreignKey: {
-        name:"categoryId",
-        allowNull:false,
-        //defaultValue:1
-    },
-    // onDelete:"SET NULL",
-    // onUpdate:"RESTRICT"
-});
-Blog.belongsTo(Categories);
+Blog.belongsToMany(Categories,{through:'blogCategories'});
+Categories.belongsToMany(Blog,{through:'blogCategories'});
 
 const sequelize = require('./data/db.js');
 const DummyData = require('./data/dummy-data.js');

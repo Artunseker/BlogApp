@@ -18,7 +18,7 @@ async function populate(){
             image:"1.jpeg",
             anasayfa:true,
             onay:true,
-            categoryId:1
+           
         });
         await Blog.create({
             title:"Blog Title2",
@@ -27,7 +27,6 @@ async function populate(){
             image:"2.jpeg",
             anasayfa:true,
             onay:true,
-            categoryId:2
         });
     } 
     

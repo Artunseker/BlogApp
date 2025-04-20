@@ -1,6 +1,5 @@
 const { DataTypes }=require('sequelize');
 const sequelize=require('../data/db.js');
-const Categories = require('./category.js');
 
 const Blog=sequelize.define('blog',{
     title:{
@@ -26,7 +25,9 @@ const Blog=sequelize.define('blog',{
     onay:{
         type:DataTypes.BOOLEAN,
         allowNull:false
-    },
+    }
+},{
+    timestamps:false
 });
 
 
