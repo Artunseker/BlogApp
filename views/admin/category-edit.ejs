@@ -10,7 +10,11 @@
     <div class="container mt-3">
         <div class="row">
             <div class="col-md-12 mt-3">
-                
+                <% if (action!="undefined" && action=="Cat") { %>
+                    <div class="alert alert-danger">
+                        <strong>Başarılı!</strong> Kategorideki blog silindi.
+                    </div>
+                <% } %>
                 <form method="post">
                     <input type="hidden" name="categoryid" value="<%= category.id %>">
                     <div class="row mb-3">
@@ -36,7 +40,7 @@
                         <th style="width: 50px;">id</th>
                         <th style="width: 150px;">Resim</th>
                         <th>Başlık</th>
-                        <th style="width: 130px;"></th>
+                        <th style="width: 200px;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,7 +51,12 @@
                             <td><%= blog.title %></td>
                             <td>
                                 <a class="btn btn-sm btn btn-primary" href="/admin/blogs/<%= blog.id %>">edit</a>
-                                <a class="btn btn-sm btn btn-danger" href="/admin/blog/delete/<%= blog.id %>">delete</a>
+
+                                <form style="display: inline-block;" action="/admin/categories/remove" method="post">
+                                    <input type="hidden" name="blogid" value="<%= blog.id %>" >
+                                    <input type="hidden" name="categoryid" value="<%= category.id %>" >
+                                    <button class="btn btn-sm btn btn-danger" type="submit">Kategoriden Çıkar</button>
+                                </form>
                             </td>
                         </tr>
                     <% }) %>

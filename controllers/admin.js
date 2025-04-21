@@ -2,6 +2,7 @@ const Blog = require("../models/blog");
 const Categories = require("../models/category");
 const fs = require("fs");
 const { Op, where } = require("sequelize");
+const sequelize = require("../data/db.js");
 
 const admin_get_delete_category = async function(req,res){
     const category_id=req.params.categoryid;
@@ -49,7 +50,6 @@ const admin_get_delete_blog=async(req,res)=>{
         console.log(err);
     }
 }
-
 const admin_post_delete_blog=async(req,res)=>{
     const blog_id=req.body.blogid;
     try{
@@ -63,6 +63,14 @@ const admin_post_delete_blog=async(req,res)=>{
     catch(err){
         console.log(err);
     }
+}
+const post_category_remove=async function(req,res){
+    const category_id=req.body.categoryid;
+    const blog_id=req.body.blogid;
+    await sequelize.query("DELETE FROM blogCategories WHERE blogId=? AND categoryId=?",{
+        replacements:[blog_id,category_id]
+    });
+    res.redirect("/admin/categories/" + category_id + "?action=Cat");
 }
 const admin_get_create_category=async function(req,res){
     try{
@@ -125,6 +133,7 @@ const admin_post_create_blog=async(req,res)=>{
 }
 const admin_get_edit_category=async function(req,res){
     const category_id=req.params.categoryid;
+    const action=req.query.action;
     try{
 
         const category= await Categories.findByPk(category_id);
@@ -136,7 +145,8 @@ const admin_get_edit_category=async function(req,res){
                 title:category.dataValues.name,
                 category:category.dataValues,
                 bloglar:blogs,
-                countBlog:countBlog
+                countBlog:countBlog,
+                action: action || "" 
             });
         }    
         res.redirect("/admin/categories");
@@ -300,5 +310,6 @@ module.exports={
     admin_get_edit_blog,
     admin_post_edit_blog,
     admin_get_blogs,
-    admin_get_categories
+    admin_get_categories,
+    post_category_remove,
 };

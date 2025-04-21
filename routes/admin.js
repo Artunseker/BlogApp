@@ -12,6 +12,8 @@ adminRouter.get("/category/delete/:categoryid",admin_controller.admin_get_delete
 
 adminRouter.post("/category/delete/:categoryid",admin_controller.admin_post_delete_category);
 
+adminRouter.post("/categories/remove",admin_controller.post_category_remove);
+
 adminRouter.get("/categories/:categoryid",admin_controller.admin_get_edit_category);
 
 adminRouter.post("/categories/:categoryid",admin_controller.admin_post_edit_category);
