@@ -3,6 +3,7 @@ const Categories = require("../models/category");
 const fs = require("fs");
 const { Op, where } = require("sequelize");
 const sequelize = require("../data/db.js");
+const slugify = require("../helpers/slugfield.js");
 
 const admin_get_delete_category = async function(req,res){
     const category_id=req.params.categoryid;
@@ -118,6 +119,7 @@ const admin_post_create_blog=async(req,res)=>{
         console.log(resim);
         await Blog.create({
             title: baslik,
+            url: slugify(baslik),
             altbaslik: altbaslik,
             description: aciklama,
             image: resim,
@@ -203,6 +205,8 @@ const admin_post_edit_blog=async(req,res)=>{
     const baslik=req.body.baslik;
     const aciklama=req.body.aciklama;
     const kategoriIds =req.body.categories;
+    const url=req.body.url;
+
     let resim=req.body.resim;
 
     if(req.file){
@@ -238,6 +242,7 @@ const admin_post_edit_blog=async(req,res)=>{
             blog.anasayfa=anasayfa;
             blog.onay=onay;
             blog.categoryId=kategori;
+            blog.url=url;
 
             if(kategoriIds==undefined){
                 await blog.removeCategories(blog.categories);
