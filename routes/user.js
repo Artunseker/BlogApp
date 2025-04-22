@@ -3,12 +3,12 @@ const router = express.Router();
 
 const userController = require("../controllers/user");
 
-router.use("/blogs/categories/:slug",userController.blogs_by_category);
+router.get("/blogs/categories/:slug",userController.blogs);
 
-router.use("/blogs/:slug", userController.blogs_detail);
+router.get("/blogs/:slug", userController.blogs_detail);
 
-router.use("/blogs",userController.blogs);
+router.get("/blogs",userController.blogs);
 
-router.use("/",userController.anasayfa);
+router.get("/",userController.anasayfa);
 
 module.exports = router;

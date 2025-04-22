@@ -27,9 +27,7 @@
                     <%- include('../partials/blog-card',blog) %>
                 <% }) %>
 
-                <% if (bloglar.filter(b=>b.onay).length>3) { %>
-                    <%- include('../partials/pagination') %>
-                <% } %>
+                <%- include('../partials/pagination') %>
 
             </div>
 

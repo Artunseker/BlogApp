@@ -2,36 +2,7 @@ const Blog = require("../models/blog");
 const Categories = require("../models/category");
 const { Op, where } = require("sequelize");
 
-const blogs_by_category = async function(req,res){
-    const slug=req.params.slug;
-    
-    try{
-        const blogs = await Blog.findAll({
-            where:{
-                onay:true
-            },
-            include:{
-                model:Categories,
-                where:{
-                    url:slug
-                }
-            },
-            raw:true
-        });
-        const categories = await Categories.findAll({raw:true});
-        
-        res.render('users/blogs',{
-            title:"Tüm Kurslar",
-            categories:categories,
-            bloglar:blogs,
-            selectedCategory:slug,
-        });
-    }
-    catch(err){
-        console.log(err);
-    }
-    
-}
+
 const blogs_detail =async function(req,res){
     const id =req.params.slug;
 
@@ -56,13 +27,21 @@ const blogs_detail =async function(req,res){
     }
 }
 const blogs=async function(req,res){
+    const size=3;
+    const { page=0 }=req.query;
+    const slug =req.params.slug;
     try{
-        const blogs = await Blog.findAll({
+        const {rows,count} = await Blog.findAndCountAll({
             where:{
                 onay:true
             },
-            raw:true
+            raw:true,
+            include: slug ? [{model: Categories,where:{url:slug}}] : null,
+            limit:size,
+            offset:page*size
+
         });
+
         const categories = await Categories.findAll({
             raw:true
         });
@@ -70,8 +49,12 @@ const blogs=async function(req,res){
         res.render('users/blogs',{
             title:"Tüm Kurslar",
             categories:categories,
-            bloglar:blogs,
-            selectedCategory:null,
+            bloglar:rows,
+            selectedCategory:slug,
+            totalItems:count,
+            currentPage:page,
+            TotalPages:Math.ceil(count/size)
+            
         });
     }
     catch(err){
@@ -105,7 +88,6 @@ const anasayfa=async function(req,res){
     }
 }
 module.exports={
-    blogs_by_category,
     blogs_detail,
     blogs,
     anasayfa
