@@ -8,13 +8,14 @@ app.use(express.urlencoded({extended:false}));
 
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
 const adminRouter = require('./routes/admin');
+const AuthRouter = require('./routes/auth.js');
 
 app.use("/libraries",express.static("node_modules"));//takma isim libraries, html gibi static dosyalar için kullanılır
 app.use("/static",express.static("public"));//public klasör dosyalar için kullanılır fakat static adı ile html de kullanılır. Çünkü daha güvenlidir.
 
 app.use("/admin",adminRouter);//burada her admin ile başlayan route adminRouter'a gider
 app.use(userRouter);//user.js dosyasını kullanmaya başlıyoruz
-
+app.use("/account",AuthRouter);
 //ilişkiler
 const Categories = require('./models/category.js');
 const Blog = require('./models/blog.js');
