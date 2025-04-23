@@ -18,6 +18,10 @@ app.use(userRouter);//user.js dosyasını kullanmaya başlıyoruz
 //ilişkiler
 const Categories = require('./models/category.js');
 const Blog = require('./models/blog.js');
+const User = require('./models/user.js');
+
+Blog.belongsTo(User,{foreignKey:{allowNull:true}}); //Blog modelinin userId ile User modeline bağlanmasını sağlıyoruz. foreignKey ile hangi anahtarın kullanılacağını belirtiyoruz.
+User.hasMany(Blog); //Bir user birden fazla bloga sahip olabilir
 
 Blog.belongsToMany(Categories,{through:'blogCategories'});
 Categories.belongsToMany(Blog,{through:'blogCategories'});
