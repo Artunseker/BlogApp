@@ -3,6 +3,8 @@ const Blog = require('../models/blog');
 const slug = require('../helpers/slugfield.js');
 const User = require('../models/user');
 const bcrypt = require("bcrypt");
+
+
 async function populate(){
     const count=await Category.count();
 

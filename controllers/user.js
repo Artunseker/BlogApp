@@ -18,6 +18,7 @@ const blogs_detail =async function(req,res){
             return res.render('users/blog-details',{
                 title:blogs.baslik,
                 blog:blogs,
+                isAuth:req.session.isAuth,
             });
         }
         res.redirect("/blogs");
@@ -50,10 +51,12 @@ const blogs=async function(req,res){
             title:"Tüm Kurslar",
             categories:categories,
             bloglar:rows,
+            isAuth:req.session.isAuth,
             selectedCategory:slug,
             totalItems:count,
             currentPage:page,
             TotalPages:Math.ceil(count/size)
+            
             
         });
     }

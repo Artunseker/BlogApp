@@ -1,7 +1,9 @@
 const express = require('express');
-const session=require("express-session");
 const app = express();//uygulamamızı oluşturduk
+
 const cookie=require("cookie-parser");
+const session=require("express-session");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 app.set("view engine","ejs");
 app.use(express.urlencoded({extended:false}));
@@ -12,7 +14,11 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 // 1 gün
-    }
+    },
+    store: new SequelizeStore({
+        db: require('./data/db.js'),
+        tableName: "sessions"
+    })
 }));
 
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
@@ -41,8 +47,8 @@ const DummyData = require('./data/dummy-data.js');
 
 //IIFE
 (async() => {
-    await sequelize.sync({force:true});//veritabanı ile bağlantı kuruyoruz. force:true olursa veritabanını sıfırlar. false olursa sıfırlamaz.
-    await DummyData();//dummy-data.js dosyasındaki populate fonksiyonunu çalıştırıyoruz. Bu fonksiyon veritabanını dolduruyor.
+    // await sequelize.sync({force:true});//veritabanı ile bağlantı kuruyoruz. force:true olursa veritabanını sıfırlar. false olursa sıfırlamaz.
+    // await DummyData();//dummy-data.js dosyasındaki populate fonksiyonunu çalıştırıyoruz. Bu fonksiyon veritabanını dolduruyor.
 })();
 
 app.listen(8000, () => {
