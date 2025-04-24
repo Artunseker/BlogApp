@@ -80,7 +80,7 @@ const anasayfa=async function(req,res){
             categories:categories,
             bloglar:blogs,
             selectedCategory:null,
-            isAuth:req.cookies.isAuth,
+            isAuth:req.session.isAuth,
    }); // burada html de dinamik ejs aracılığyla kullanmak için users indexe db verilerini gönderiyoruz
     }
     catch(err){

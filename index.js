@@ -1,11 +1,19 @@
 const express = require('express');
-
+const session=require("express-session");
 const app = express();//uygulamamızı oluşturduk
 const cookie=require("cookie-parser");
 
 app.set("view engine","ejs");
 app.use(express.urlencoded({extended:false}));
 app.use(cookie());
+app.use(session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 // 1 gün
+    }
+}));
 
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
 const adminRouter = require('./routes/admin');
