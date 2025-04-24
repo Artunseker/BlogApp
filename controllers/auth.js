@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const User =require("../models/user");
+
+
 const get_register = async(req, res) => {
     try{
         return res.render("auth/register", {
@@ -63,6 +65,8 @@ const post_login = async(req, res) => {
         const match = await bcrypt.compare(password, user.password);
             
         if(match){
+            res.cookie("isAuth",1)
+
                 //login olduk login oldugunda sessiona useri ekliyoruz
             return res.redirect("/");
         }
@@ -78,9 +82,20 @@ const post_login = async(req, res) => {
     }      
 }
 
+const get_logout = async(req, res) => {
+    try{
+        res.clearCookie("isAuth");
+        return res.redirect("/account/login");
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
 module.exports={
     get_register,
     post_register,
     get_login,
-    post_login
+    post_login,
+    get_logout
 }

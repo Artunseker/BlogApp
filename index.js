@@ -1,10 +1,11 @@
 const express = require('express');
 
 const app = express();//uygulamamızı oluşturduk
+const cookie=require("cookie-parser");
 
 app.set("view engine","ejs");
 app.use(express.urlencoded({extended:false}));
-
+app.use(cookie());
 
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
 const adminRouter = require('./routes/admin');
