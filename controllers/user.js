@@ -18,7 +18,6 @@ const blogs_detail =async function(req,res){
             return res.render('users/blog-details',{
                 title:blogs.baslik,
                 blog:blogs,
-                isAuth:req.session.isAuth,
             });
         }
         res.redirect("/blogs");
@@ -51,7 +50,6 @@ const blogs=async function(req,res){
             title:"Tüm Kurslar",
             categories:categories,
             bloglar:rows,
-            isAuth:req.session.isAuth,
             selectedCategory:slug,
             totalItems:count,
             currentPage:page,
@@ -83,7 +81,7 @@ const anasayfa=async function(req,res){
             categories:categories,
             bloglar:blogs,
             selectedCategory:null,
-            isAuth:req.session.isAuth,
+         
    }); // burada html de dinamik ejs aracılığyla kullanmak için users indexe db verilerini gönderiyoruz
     }
     catch(err){

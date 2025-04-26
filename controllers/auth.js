@@ -65,7 +65,8 @@ const post_login = async(req, res) => {
         const match = await bcrypt.compare(password, user.password);
             
         if(match){
-            req.session.isAuth=1;
+            req.session.isAuth=true;
+            req.session.fullName=user.fullName;
 
                 //login olduk login oldugunda sessiona useri ekliyoruz
             return res.redirect("/");

@@ -44,6 +44,8 @@ Categories.belongsToMany(Blog,{through:'blogCategories'});
 
 const sequelize = require('./data/db.js');
 const DummyData = require('./data/dummy-data.js');
+const locals = require('./middlewares/locals.js');
+app.use(locals);
 
 //IIFE
 (async() => {
