@@ -66,10 +66,9 @@ const post_login = async(req, res) => {
             
         if(match){
             req.session.isAuth=true;
-            req.session.fullName=user.fullName;
-
-                //login olduk login oldugunda sessiona useri ekliyoruz
-            return res.redirect("/");
+            req.session.fullName=user.fullName;//login olduk login oldugunda sessiona bilgileri ekliyoruz
+            const url = req.query.returnUrl || "/";
+            return res.redirect(url);
         }
         else{
             return res.render("auth/login", {
