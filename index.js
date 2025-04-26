@@ -20,6 +20,8 @@ app.use(session({
         tableName: "sessions"
     })
 }));
+const locals = require('./middlewares/locals.js');
+app.use(locals);
 
 const userRouter = require('./routes/user');//user.js dosyasını dahil ettik
 const adminRouter = require('./routes/admin');
@@ -44,8 +46,7 @@ Categories.belongsToMany(Blog,{through:'blogCategories'});
 
 const sequelize = require('./data/db.js');
 const DummyData = require('./data/dummy-data.js');
-const locals = require('./middlewares/locals.js');
-app.use(locals);
+
 
 //IIFE
 (async() => {
