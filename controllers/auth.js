@@ -21,12 +21,24 @@ const post_register = async(req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try{
+        const user = await User.findOne({
+            where: {
+                email: email,
+            }
+        });
+        if(user){
+            req.session.message={text:"Email already exists",class:"warning"};
+            return res.redirect("login");
+        }
         await User.create({
             fullName: name,
             email: email,
             password: hashedPassword,
         });
+
+        req.session.message={text:"Registration successful",class:"success"};
         return res.redirect("login");
+
     }
     catch(err){
         console.log(err);
@@ -34,9 +46,12 @@ const post_register = async(req, res) => {
 }
 
 const get_login = async(req, res) => {
+    const message = req.session.message;
+    delete req.session.message;
     try{
         return res.render("auth/login", {
             title: "login",
+            message: message,
         });
     }
     catch(err){
@@ -59,8 +74,9 @@ const post_login = async(req, res) => {
         if(!user){
             return res.render("auth/login", {
                title: "login",
-                message:"Email or password is incorrect"
+                message:{text:"Email hatalı girildi",class:"danger"}
             });
+            
         }
         const match = await bcrypt.compare(password, user.password);
             
@@ -73,7 +89,7 @@ const post_login = async(req, res) => {
         else{
             return res.render("auth/login", {
                 title: "login",
-                message:"password is incorrect"
+                message:{text:"Password is wrong",class:"danger"}
             });
         }
     } 
